@@ -44,7 +44,15 @@ fi
 shasum ${TMP}/netboot.tar.gz > ${TMP}/netboot.tar.gz.shasum
 cp -R ${TMP}/netboot/ubuntu-installer/amd64/* ${BOOT}
 
-CMDLINE="earlyprintk=earlyser console=ttyS0 acpi=off selinux=0 root=/dev/nfs rw ip=dhcp nfsroot=${NFS_ROOT}"
+cp seed.cfg ${ROOT}
+
+#CMDLINE="earlyprintk=earlyser console=ttyS0 acpi=off selinux=0 root=/dev/nfs rw ip=dhcp nfsroot=${NFS_ROOT} -- ks=nfs:${NFS_ROOT}/seed.cfg"
+#CMDLINE="modules=virtio_blk,af_socket,loop,squashfs,sd-mod,usb-storage,sr-mod,ext4 debug_init earlyprintk=earlyser console=ttyS0 acpi=off selinux=0 root=/dev/nfs rw nfsroot=${NFS_ROOT} -- ks=nfs:${NFS_ROOT}/seed.cfg"
+#CMDLINE="linux noipv6 console=tty0 console=lp0 console=ttyS0 loglevel=0 vga=normal initrd=initrd.gz ramdisk_size=16432 root=/dev/nfs rw DEBIAN_FRONTEND=text TERM=xterm-256color --" # ks=nfs:${NFS_ROOT}/seed.cfg"
+CMDLINE="linux noipv6 console=tty0 console=lp0 console=ttyS0 loglevel=0 vga=normal initrd=initrd.gz ramdisk_size=16432 root=/dev/nfs rw TERM=xterm-256color --" # ks=nfs:${NFS_ROOT}/seed.cfg"
+
+#BOOTIF=eth0
+#net.ifnames=0 biosdevname=0"
 
 MEM="-m 3G"
 PCI_DEV="-s 0:0,hostbridge -s 31,lpc"

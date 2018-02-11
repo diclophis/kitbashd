@@ -16,15 +16,16 @@ REAL_ROOT=$(realpath ${ROOT})
 #KERNEL=${BOOT}/vmlinuz-4.4.0-21-generic
 #INITRD=${BOOT}/initrd.img-4.4.0-21-generic
 
-#KERNEL=${BOOT}/linux
+KERNEL=${BOOT}/linux
 INITRD=${BOOT}/initrd.gz
 
-KERNEL=${REAL_ROOT}/boot/vmlinuz-4.4.0-112-generic
+#KERNEL=${REAL_ROOT}/boot/vmlinuz-4.4.0-112-generic
 #INITRD=${REAL_ROOT}/boot/initrd.img-4.4.0-112-generic
 
 MY_IP=$(ifconfig | grep inet | grep broadcast | grep -v 192.168.84 | grep -v 192.168.64 | cut -d' ' -f 2 | head -n1)
 
-NFS_ROOT=${MY_IP}:${REAL_ROOT}
+#NFS_ROOT=${MY_IP}:${REAL_ROOT}
+NFS_ROOT=192.168.84.10:/opt/root
 
 echo ${NFS_ROOT}
 
@@ -57,10 +58,12 @@ CMDLINE="linux noipv6 console=tty0 console=lp0 console=ttyS0 loglevel=0 vga=norm
 MEM="-m 3G"
 PCI_DEV="-s 0:0,hostbridge -s 31,lpc"
 LPC_DEV="-l com1,stdio"
-#NET="-s 2:0,virtio-net"
+#NET="-s 2:0,virtio-net,en0"
 NET="-s 2:0,virtio-vpnkit,path=/tmp/ethernet"
+#NET="-s 2:0,virtio-vpnkit,path=/tmp/ethernet"
+UUID="-U 8888badf-970e-4577-a6fa-6dd16c9d7795"
 
-hyperkit/build/hyperkit $MEM $PCI_DEV $LPC_DEV $NET $IMG_CD $IMG_HDD -f kexec,$KERNEL,$INITRD,"$CMDLINE"
+hyperkit/build/hyperkit $MEM $PCI_DEV $LPC_DEV $NET $IMG_CD $IMG_HDD $UUID -f kexec,$KERNEL,$INITRD,"$CMDLINE"
 
 ## working fat32 ufi hybrid!
 #

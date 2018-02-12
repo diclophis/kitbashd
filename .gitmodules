@@ -4,3 +4,6 @@
 [submodule "vpnkit"]
 	path = vpnkit
 	url = git@github.com:moby/vpnkit.git
+[submodule "datakit"]
+	path = datakit
+	url = git@github.com:moby/datakit.git

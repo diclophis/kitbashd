@@ -16,11 +16,11 @@ REAL_ROOT=$(realpath ${ROOT})
 #KERNEL=${BOOT}/vmlinuz-4.4.0-21-generic
 #INITRD=${BOOT}/initrd.img-4.4.0-21-generic
 
-KERNEL=${BOOT}/linux
-INITRD=${BOOT}/initrd.gz
+#KERNEL=${BOOT}/linux
+#INITRD=${BOOT}/initrd.gz
 
-#KERNEL=${REAL_ROOT}/boot/vmlinuz-4.4.0-112-generic
-#INITRD=${REAL_ROOT}/boot/initrd.img-4.4.0-112-generic
+KERNEL=${REAL_ROOT}/boot/vmlinuz-4.4.0-112-generic
+INITRD=${REAL_ROOT}/boot/initrd.img-4.4.0-112-generic
 
 MY_IP=$(ifconfig | grep inet | grep broadcast | grep -v 192.168.84 | grep -v 192.168.64 | cut -d' ' -f 2 | head -n1)
 
@@ -50,7 +50,12 @@ cp seed.cfg ${ROOT}
 #CMDLINE="earlyprintk=earlyser console=ttyS0 acpi=off selinux=0 root=/dev/nfs rw ip=dhcp nfsroot=${NFS_ROOT} -- ks=nfs:${NFS_ROOT}/seed.cfg"
 #CMDLINE="modules=virtio_blk,af_socket,loop,squashfs,sd-mod,usb-storage,sr-mod,ext4 debug_init earlyprintk=earlyser console=ttyS0 acpi=off selinux=0 root=/dev/nfs rw nfsroot=${NFS_ROOT} -- ks=nfs:${NFS_ROOT}/seed.cfg"
 #CMDLINE="linux noipv6 console=tty0 console=lp0 console=ttyS0 loglevel=0 vga=normal initrd=initrd.gz ramdisk_size=16432 root=/dev/nfs rw DEBIAN_FRONTEND=text TERM=xterm-256color --" # ks=nfs:${NFS_ROOT}/seed.cfg"
-CMDLINE="linux noipv6 console=tty0 console=lp0 console=ttyS0 loglevel=0 vga=normal initrd=initrd.gz ramdisk_size=16432 root=/dev/nfs rw ip=dhcp nfsroot=${NFS_ROOT} TERM=xterm-256color -- ks=nfs:${NFS_ROOT}/seed.cfg"
+#CMDLINE="linux noipv6 console=tty0 console=lp0 console=ttyS0 loglevel=0 vga=normal initrd=initrd.gz ramdisk_size=16432 root=/dev/nfs rw ip=dhcp nfsroot=${NFS_ROOT} TERM=xterm-256color -- ks=nfs:${NFS_ROOT}/seed.cfg"
+#IMPORTANT_ARGS="noipv6 console=tty0 console=lp0 console=ttyS0 loglevel=0 vga=normal ramdisk_size=16432 rw ip=dhcp"
+#IMPORTANT_ARGS="console=ttyS0 console=tty0 console=lp0 console=tty1 console=ttyS0 noipv6 ramdisk_size=16432 rw ip=dhcp"
+IMPORTANT_ARGS="console=tty0 console=ttyS0,115200n8 noipv6 ramdisk_size=16432 rw ip=dhcp"
+CMDLINE="linux ${IMPORTANT_ARGS} root=/dev/nfs nfsroot=${NFS_ROOT}" # TERM=xterm-256color init=/bin/bash"
+#noipv6 console=tty0 console=lp0 console=ttyS0 loglevel=0 vga=normal initrd=initrd.gz ramdisk_size=16432 root=/dev/nfs rw ip=dhcp nfsroot=${NFS_ROOT} TERM=xterm-256color -- ks=nfs:${NFS_ROOT}/seed.cfg"
 
 #BOOTIF=eth0
 #net.ifnames=0 biosdevname=0"
@@ -120,3 +125,27 @@ hyperkit/build/hyperkit $MEM $PCI_DEV $LPC_DEV $NET $IMG_CD $IMG_HDD $UUID -f ke
 #        #sudo parted ${BOOTDISK_DEV} set 1 bios_grub on
 #        #sudo grub-install --removable --boot-directory=/var/tmp/new-iso/boot --efi-directory=/var/tmp/new-iso/EFI/BOOT ${BOOTDISK_DEV} || true
 #        #sudo umount ${BOOTDISK_DEV}1
+
+# /opt/root//lib/systemd/system/getty\@.service
+#
+#    root@kickseed:~# cat /opt/root/etc/fstab 
+#    # UNCONFIGURED FSTAB FOR BASE SYSTEM
+#    #192.168.84.10:/opt/root / nfs (rw,relatime,vers=3,rsize=524288,wsize=524288,namlen=255,hard,nolock,proto=tcp,port=2049,timeo=7,retrans=10,sec=sys,local_lock=all,addr=192.168.84.10) 0 0
+#    #/dev/nfs    /        nfs     defaults    1    1
+#    tmpfs   /tmp         tmpfs   rw,nodev,nosuid,size=2G          0  0
+#    /proc    /proc    proc    defaults   0 0
+#    /sys     /sys     sysfs   defaults   0 0
+ 
+#   #
+#   source /etc/network/interfaces.d/*
+#   
+#   # The loopback network interface
+#   auto lo
+#   iface lo inet loopback
+#   
+#   # The primary network interface
+#   auto enp0s2
+#   iface enp0s2 inet dhcp
+
+# sudo debootstrap --variant=minbase artful /opt/root
+# /opt/root *(rw,insecure,async,no_root_squash,no_subtree_check,no_all_squash) 

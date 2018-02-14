@@ -55,6 +55,8 @@ cp seed.cfg ${ROOT}
 #IMPORTANT_ARGS="console=ttyS0 console=tty0 console=lp0 console=tty1 console=ttyS0 noipv6 ramdisk_size=16432 rw ip=dhcp"
 IMPORTANT_ARGS="console=tty0 console=ttyS0,115200n8 noipv6 ramdisk_size=16432 rw ip=dhcp"
 CMDLINE="linux ${IMPORTANT_ARGS} root=/dev/nfs nfsroot=${NFS_ROOT}" # TERM=xterm-256color init=/bin/bash"
+#IMPORTANT_ARGS="console=tty0 console=ttyS0,115200n8 noipv6 ramdisk_size=16432 rw ip=dhcp"
+#CMDLINE="linux ${IMPORTANT_ARGS} root=/dev/nfs nfsroot=${NFS_ROOT} initrd=initrd.gz TERM=xterm-256color init=/bin/bash"
 #noipv6 console=tty0 console=lp0 console=ttyS0 loglevel=0 vga=normal initrd=initrd.gz ramdisk_size=16432 root=/dev/nfs rw ip=dhcp nfsroot=${NFS_ROOT} TERM=xterm-256color -- ks=nfs:${NFS_ROOT}/seed.cfg"
 
 #BOOTIF=eth0
@@ -68,7 +70,7 @@ NET="-s 2:0,virtio-vpnkit,path=/tmp/ethernet"
 #NET="-s 2:0,virtio-vpnkit,path=/tmp/ethernet"
 UUID="-U 8888badf-970e-4577-a6fa-6dd16c9d7795"
 
-hyperkit/build/hyperkit $MEM $PCI_DEV $LPC_DEV $NET $IMG_CD $IMG_HDD $UUID -f kexec,$KERNEL,$INITRD,"$CMDLINE"
+sudo hyperkit/build/hyperkit $MEM $PCI_DEV $LPC_DEV $NET $IMG_CD $IMG_HDD $UUID -f kexec,$KERNEL,$INITRD,"$CMDLINE"
 
 ## working fat32 ufi hybrid!
 #

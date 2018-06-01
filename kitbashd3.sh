@@ -3,20 +3,25 @@
 set -e
 set -x
 
+DISK=$1
 KERNEL=tmp/vmlinuz-4.13.0-43-generic
 INITRD=tmp/initrd.img-4.13.0-43-generic
 
-#IMPORTANT_ARGS="console=tty0 console=ttyS0,115200n8 noipv6 rw ip=dhcp root=/dev/vda1"
+if [ -z "$DISK" ];
+then
+  echo please specify disk
+  exit 1
+fi
+
 IMPORTANT_ARGS="rw root=/dev/vda1"
 CMDLINE="linux ${IMPORTANT_ARGS}"
 
 MEM="-m 3G"
-CPU="-c 2"
+CPU="-c 3"
 PCI_DEV="-s 0:0,hostbridge -s 31,lpc"
-#LPC_DEV="-l com1,stdio"
 LPC_DEV=""
 NET="-s 2:0,virtio-net,en0"
-IMG_HDD="-s 4:0,virtio-blk,tmp/disk.img"
+IMG_HDD="-s 4:0,virtio-blk,$DISK"
 
 UUID="-U 8888badf-970e-4577-a6fa-6dd16c9d7795"
 

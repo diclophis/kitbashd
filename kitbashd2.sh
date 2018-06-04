@@ -24,7 +24,7 @@ fi
 
 dd if=/dev/zero of=$DISK bs=1024k seek=8192 count=0
 
-IMPORTANT_ARGS="rw"
+IMPORTANT_ARGS="console=tty0 console=ttyS0,115200n8 rw"
 CMDLINE="linux ${IMPORTANT_ARGS} ks=file:/workstation-install.cfg"
 
 MEM="-m 1G"

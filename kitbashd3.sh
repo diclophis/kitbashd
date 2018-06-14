@@ -5,6 +5,7 @@ set -x
 
 DISK=$1
 UUID=$2
+BUSYBOX=$3
 
 KERNEL=tmp/vmlinuz-4.13.0-43-generic
 INITRD=tmp/initrd.img-4.13.0-43-generic
@@ -13,9 +14,12 @@ INITRD=tmp/initrd.img-4.13.0-43-generic
 #KERNEL=tmp/vmlinuz-4.13.0-36-generic
 #INITRD=tmp/extras.img
 
-#NOTE: busybox
-#KERNEL=tmp/linux
-#INITRD=tmp/rootfs-empty.gz
+if [ -n "${BUSYBOX}" ];
+then
+  #NOTE: busybox
+  KERNEL=tmp/linux
+  INITRD=tmp/rootfs-empty.gz
+fi
 
 #tmp/extras/boot/vmlinuz-4.13.0-36-generic
 #INITRD=tmp/initrd-2.0b.gz
@@ -38,7 +42,7 @@ IMPORTANT_ARGS="rw root=/dev/vda1 console=tty0 console=ttyS0,115200n8 net.ifname
 CMDLINE="linux ${IMPORTANT_ARGS} init=/bin/init"
 
 MEM="-m 3G"
-CPU="-c 3"
+CPU="-c 6"
 PCI_DEV="-s 0:0,hostbridge -s 31,lpc"
 LPC_DEV="-l com1,stdio"
 NET="-s 2:0,virtio-net,en0"

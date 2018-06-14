@@ -8,11 +8,11 @@ UUID=$2
 KERNEL=tmp/vmlinuz-4.13.0-43-generic
 INITRD=tmp/initrd.img-4.13.0-43-generic
 
-if [ -z "$DISK" -o ! test -e "$DISK" ];
-then
-  echo please specify existing disk file
-  exit 1
-fi
+#if [ test -z "${DISK}" || ! test -e "${DISK}" ];
+#then
+#  echo please specify existing disk file
+#  exit 1
+#fi
 
 if [ -z "$UUID" ];
 then
@@ -20,13 +20,13 @@ then
   exit 1
 fi
 
-IMPORTANT_ARGS="rw root=/dev/vda1"
+IMPORTANT_ARGS="rw root=/dev/vda1 console=ttyS0,1152000n8 systemd.journald.forward_to_console=1"
 CMDLINE="linux ${IMPORTANT_ARGS}"
 
 MEM="-m 3G"
 CPU="-c 3"
 PCI_DEV="-s 0:0,hostbridge -s 31,lpc"
-LPC_DEV=""
+LPC_DEV="-l com1,stdio"
 NET="-s 2:0,virtio-net,en0"
 IMG_HDD="-s 4:0,virtio-blk,$DISK"
 
